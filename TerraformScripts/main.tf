@@ -1,3 +1,8 @@
+provider "azurerm" {
+  # whilst the `version` attribute is optional, we recommend pinning to a given version of the Provider
+  version = "=2.0.0"
+  features {}
+}
 
 
 resource "azurerm_resource_group" "rg-ApplicationInsights" {
@@ -34,9 +39,9 @@ resource "azurerm_app_service_plan" "asp-af-applicationinsights" {
   resource_group_name = "${azurerm_resource_group.rg-ApplicationInsights.name}"
 
   sku {
-    tier = "Basic"
-    size = "B1"
-    capacity = 1
+    tier = "Dynamic"
+    size = "Y1"
+    capacity = 0
   }
 
    tags = {
@@ -58,9 +63,18 @@ resource "azurerm_function_app" "af-applicationinsights" {
     environment = "${var.tag}"
   }
 
-    app_settings = {
-            
+   app_settings = {
+        APPINSIGHTS_INSTRUMENTATIONKEY = "${azurerm_application_insights.advancelogs.instrumentation_key}"
         
     }
 
+   
+}
+
+
+resource "azurerm_application_insights" "advancelogs" {
+  name                = "advancelogs"
+  location            = "${azurerm_resource_group.rg-ApplicationInsights.location}"
+  resource_group_name = "${azurerm_resource_group.rg-ApplicationInsights.name}"
+  application_type    = "web"
 }
