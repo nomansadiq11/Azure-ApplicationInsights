@@ -21,6 +21,8 @@ namespace ApplicationInsightsLogs
 
             string name = req.Query["name"];
 
+            log.LogInformation("Entered Name :" + name);
+
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             name = name ?? data?.name;
