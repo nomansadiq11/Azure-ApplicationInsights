@@ -1,6 +1,6 @@
 provider "azurerm" {
   # whilst the `version` attribute is optional, we recommend pinning to a given version of the Provider
-  version = "=2.0.0"
+  version = "~> 2.6.0"
   features {}
 }
 
@@ -19,7 +19,7 @@ resource "azurerm_resource_group" "rg-ApplicationInsights" {
 
 
 resource "azurerm_storage_account" "sa-applicationinsights" {
-  name                     = "sa${random_integer.ri.result}"
+  name                     = "saapplogs"
   resource_group_name      = "${azurerm_resource_group.rg-ApplicationInsights.name}"
   location                 = "${var.location}"
   account_tier             = "Standard"
@@ -48,7 +48,6 @@ resource "azurerm_app_service_plan" "asp-af-applicationinsights" {
     environment = "${var.tag}"
   }
 }
-
 
 
 
